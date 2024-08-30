@@ -84,11 +84,11 @@ export const comparePassword  = async (email : string, supplied_password : strin
     return user
 }
 
-export const comparePhoneNumber  = async (email : string, supplied_phoneNumber : string) : Promise<null | UnitUser> => {
+export const comparePhoneNumber  = async (email : string, suppliedPhoneNumber : string) : Promise<null | UnitUser> => {
 
     const user = await findByEmail(email)
 
-    const isPhoneNumber = (supplied_phoneNumber === user!.phoneNumber)
+    const isPhoneNumber = (suppliedPhoneNumber === user!.phoneNumber)
 
     if (!isPhoneNumber) {
         return null

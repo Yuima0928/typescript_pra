@@ -47,7 +47,8 @@ export const create = async (userData: UnitUser): Promise<UnitUser | null> => {
     id : id,
     username : userData.username,
     email : userData.email,
-    password: hashedPassword
+    password: hashedPassword,
+    phoneNumber: userData.phoneNumber
   };
 
   users[id] = user;
@@ -77,6 +78,19 @@ export const comparePassword  = async (email : string, supplied_password : strin
     const decryptPassword = await bcrypt.compare(supplied_password, user!.password)
 
     if (!decryptPassword) {
+        return null
+    }
+
+    return user
+}
+
+export const comparePhoneNumber  = async (email : string, suppliedPhoneNumber : string) : Promise<null | UnitUser> => {
+
+    const user = await findByEmail(email)
+
+    const isPhoneNumber = (suppliedPhoneNumber === user!.phoneNumber)
+
+    if (!isPhoneNumber) {
         return null
     }
 

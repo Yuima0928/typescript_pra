@@ -88,9 +88,9 @@ export const comparePhoneNumber  = async (email : string, supplied_phoneNumber :
 
     const user = await findByEmail(email)
 
-    const decryptPhoneNumber = (supplied_phoneNumber === user!.phoneNumber)
+    const isPhoneNumber = (supplied_phoneNumber === user!.phoneNumber)
 
-    if (!decryptPhoneNumber) {
+    if (!isPhoneNumber) {
         return null
     }
 

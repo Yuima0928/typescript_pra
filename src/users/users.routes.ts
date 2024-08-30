@@ -84,7 +84,7 @@ userRouter.post("/login", async (req : Request, res : Response) => {
     }
 })
 
-userRouter.post("/loginTwoWays", async (req : Request, res : Response) => {
+userRouter.post("/login-two-ways", async (req : Request, res : Response) => {
     try {
         const {email, password, phoneNumber} = req.body
 

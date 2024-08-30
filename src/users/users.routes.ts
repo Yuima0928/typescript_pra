@@ -2,6 +2,7 @@ import express, {Request, Response} from "express"
 import { UnitUser, User } from "./user.interface"
 import {StatusCodes} from "http-status-codes"
 import * as database from "./user.database"
+import { comparePhoneNumber } from './user.database';
 
 export const userRouter = express.Router()
 
@@ -82,6 +83,40 @@ userRouter.post("/login", async (req : Request, res : Response) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error})
     }
 })
+
+userRouter.post("/loginTwoWays", async (req : Request, res : Response) => {
+    try {
+        const {email, password, phoneNumber} = req.body
+
+        if (!email || !password) {
+            return res.status(StatusCodes.BAD_REQUEST).json({error : "Please provide all the required parameters.."})
+        }
+
+        const user = await database.findByEmail(email)
+
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND).json({error : "No user exists with the email provided.."})
+        }
+
+        const comparePassword = await database.comparePassword(email, password)
+
+        if (!comparePassword) {
+            return res.status(StatusCodes.BAD_REQUEST).json({error : `Incorrect Password!`})
+        }
+
+        const comparePhoneNumber = await database.comparePhoneNumber(email, phoneNumber)
+
+        if (!comparePhoneNumber) {
+            return res.status(StatusCodes.BAD_REQUEST).json({error : `Incorrect PhoneNumber!`})
+        }
+
+        return res.status(StatusCodes.OK).json({user})
+
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error})
+    }
+})
+
 
 
 userRouter.put('/user/:id', async (req : Request, res : Response) => {
